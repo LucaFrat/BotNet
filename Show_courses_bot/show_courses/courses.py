@@ -49,7 +49,7 @@ class Courses(webdriver.Chrome):
         programmes_element = self.find_element_by_css_selector('img[title="Programmes"]')
         programmes_element.click()
 
-    def input_course_choice(self) -> str:
+    def input_course_choice(self) -> None:
         time.sleep(1)
         self.minimize_window()
         course_possibilities = const.course_possibilities 
@@ -64,12 +64,12 @@ class Courses(webdriver.Chrome):
                 print(f'\033[41mInput failed\033[00m : \"{course_choice}\" is not a possible choice.')
                 print('Choose among: ["Bachelors" - "Masters" - "PHD"]\n')
         #self.maximize_window()
-        return course_choice
+        self.course_choice = course_choice
     
-    def make_choice(self, course_choice: str) -> None:
-        choice_element = self.find_element_by_css_selector(f'a[href$="/{course_choice}"]')
+    def make_choice(self) -> None:
+        choice_element = self.find_element_by_css_selector(f'a[href$="/{self.course_choice}"]')
         choice_element.click()
 
-    def apply_filtration(self, course_choice: str) -> None:
-        filter = CourseFiltration(driver=self, choice=course_choice)
+    def apply_filtration(self) -> None:
+        filter = CourseFiltration(driver=self, choice=self.course_choice)
         filter.apply_filter()
