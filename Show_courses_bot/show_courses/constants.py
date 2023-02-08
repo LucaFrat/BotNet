@@ -3,4 +3,4 @@
 
 CHROME_PATH = r"MacintoshHD:/Users/lucafrattini/0/dev/chromedriver_mac_arm64"
 URL = "https://www.tudelft.nl"
-course_possibilities = ["bachelors", "masters", "phd"]
+COURSE_OPTIONS = ["bachelors","masters","phd"]

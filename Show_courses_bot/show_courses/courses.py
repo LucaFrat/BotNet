@@ -11,7 +11,9 @@ from selenium.webdriver.common.keys import Keys
 
 
 class Courses(webdriver.Chrome):
-    def __init__(self, driver_path=const.CHROME_PATH, teardown=False) -> None:
+    def __init__(self, driver_path=const.CHROME_PATH, 
+                 teardown=False
+                 ) -> None:
         self.driver_path = driver_path
         self.teardown = teardown
         os.environ['PATH'] += const.CHROME_PATH
@@ -25,15 +27,30 @@ class Courses(webdriver.Chrome):
     def open_url(self) -> None:
         self.implicitly_wait(15)
         self.get(const.URL)
+        self.input_visualization()
+        
+    def input_visualization(self):
+        self.minimize_window()
+        while True:
+            show_web_page = str(input('\nDo you wanna show the Web page? [y/n]: '))
+            if show_web_page == "y":
+                self.show_web_page = True
+                self.maximize_window()
+                break
+            elif show_web_page == "n":
+                self.show_web_page = False
+                break
 
     def select_english(self) -> None:
-        english_button = self.find_element_by_class_name('icon-languageSwitch')
-        english_button.click()
+        self.find_element_by_class_name(
+            'icon-languageSwitch'
+            ).click()
 
     def check_cookie(self) -> None:
         try:
-            cookie = self.find_element_by_class_name('agree')
-            cookie.click()
+            self.find_element_by_class_name(
+                'agree'
+                ).click()
         except:
             print('No cookie appeared ...')
             WebDriverWait(self, 5).until(
@@ -44,32 +61,38 @@ class Courses(webdriver.Chrome):
             )
 
     def go_to_page_to_make_choice(self):
-        education_element = self.find_element_by_css_selector('a[href$="/education"]')
-        education_element.click()
-        programmes_element = self.find_element_by_css_selector('img[title="Programmes"]')
-        programmes_element.click()
+        self.find_element_by_css_selector(
+            'a[href$="/education"]'
+            ).click()
+        self.find_element_by_css_selector(
+            'img[title="Programmes"]'
+            ).click()
 
     def input_course_choice(self) -> None:
         time.sleep(1)
-        self.minimize_window()
-        course_possibilities = const.course_possibilities 
-        string_courses = ', '.join(course_possibilities).capitalize()
-        print('\nPage minimized, make your choice:')
+        self.minimize_window() 
+        string_courses = ', '.join(const.COURSE_OPTIONS).capitalize()
+        print('Page minimized, make your choice:')
         while True:
             course_choice = input(f"{string_courses}?\n").casefold()
-            if isinstance(course_choice, str) and course_choice in course_possibilities:
+            if isinstance(course_choice,str) and course_choice in const.COURSE_OPTIONS:
                 print('Okay!\n')
                 break
             else:
-                print(f'\033[41mInput failed\033[00m : \"{course_choice}\" is not a possible choice.')
+                print(f'\033[41mInput failed\033[00m : \"{course_choice}\" \
+                       is not a possible choice.')
                 print('Choose among: ["Bachelors" - "Masters" - "PHD"]\n')
-        #self.maximize_window()
         self.course_choice = course_choice
-    
+
     def make_choice(self) -> None:
-        choice_element = self.find_element_by_css_selector(f'a[href$="/{self.course_choice}"]')
-        choice_element.click()
+        self.find_element_by_css_selector(
+            f'a[href$="/{self.course_choice}"]'
+            ).click()
 
     def apply_filtration(self) -> None:
         filter = CourseFiltration(driver=self, choice=self.course_choice)
         filter.apply_filter()
+        if self.show_web_page:
+            self.maximize_window()
+            time.sleep(2)
+    
