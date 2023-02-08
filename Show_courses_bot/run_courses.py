@@ -1,6 +1,6 @@
 from show_courses.courses import Courses
 
-with Courses(teardown=False) as bot:
+with Courses(teardown=True) as bot:
     bot.open_url()
     bot.select_english()
     bot.check_cookie()

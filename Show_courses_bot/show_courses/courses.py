@@ -2,6 +2,7 @@ import os
 import time
 import show_courses.constants as const
 from show_courses.course_filtration import CourseFiltration
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -49,20 +50,20 @@ class Courses(webdriver.Chrome):
         programmes_element.click()
 
     def input_course_choice(self) -> str:
-        time.sleep(2)
+        time.sleep(1)
         self.minimize_window()
         course_possibilities = const.course_possibilities 
         string_courses = ', '.join(course_possibilities).capitalize()
-        print('Page minimized, make your choice\n')
+        print('\nPage minimized, make your choice:')
         while True:
             course_choice = input(f"{string_courses}?\n").casefold()
             if isinstance(course_choice, str) and course_choice in course_possibilities:
-                print('Okay!')
+                print('Okay!\n')
                 break
             else:
                 print(f'\033[41mInput failed\033[00m : \"{course_choice}\" is not a possible choice.')
                 print('Choose among: ["Bachelors" - "Masters" - "PHD"]\n')
-        self.maximize_window()
+        #self.maximize_window()
         return course_choice
     
     def make_choice(self, course_choice: str) -> None:
