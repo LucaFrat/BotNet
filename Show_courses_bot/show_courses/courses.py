@@ -20,16 +20,15 @@ class Courses(webdriver.Chrome):
         super(Courses, self).__init__()
         self.implicitly_wait(15)
 
-    def __exit__(self, *args):
+    def __exit__(self, *args) -> None:
         if self.teardown:
             self.quit()
 
     def open_url(self) -> None:
-        self.implicitly_wait(15)
         self.get(const.URL)
         self.input_visualization()
         
-    def input_visualization(self):
+    def input_visualization(self) -> None:
         self.minimize_window()
         while True:
             show_web_page = str(input('\nDo you wanna show the Web page? [y/n]: '))
@@ -60,7 +59,7 @@ class Courses(webdriver.Chrome):
                 )
             )
 
-    def go_to_page_to_make_choice(self):
+    def go_to_page_to_make_choice(self) -> None:
         self.find_element_by_css_selector(
             'a[href$="/education"]'
             ).click()
