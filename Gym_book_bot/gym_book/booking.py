@@ -66,13 +66,16 @@ class Booking(webdriver.Chrome):
     def click_book(self, time_slot: str, sure: bool=False) -> None:
         self.sure = sure
         slots = self.find_elements_by_class_name('d-inline-block')
-        for slot in slots:
-            slot_time = slot.find_element_by_tag_name(
-                'strong'
-                ).get_attribute('innerHTML')
-            if slot_time.strip() == time_slot:
-                self.book_slot(slot=slot)
-                break
+        if time_slot == None:
+            self.book_slot(slots[0])
+        else:
+            for slot in slots:
+                slot_time = slot.find_element_by_tag_name(
+                    'strong'
+                    ).get_attribute('innerHTML')
+                if slot_time.strip() == time_slot:
+                    self.book_slot(slot)
+                    break
 
     def book_slot(self, slot) -> None:
         spots_elements = slot.find_elements_by_tag_name('small')   
@@ -81,7 +84,9 @@ class Booking(webdriver.Chrome):
         if int(spots_left) > 0:
             self.sure_to_book()
         else:
-            print(f'{help.red("ERROR:")} this slot has no spots available! \n')
+            print("")
+            print("+--------------------------------------------+")
+            print(f'{help.red("ERROR")}: this slot has no spots available! \n')
 
     def sure_to_book(self) -> None:
         if self.sure:
