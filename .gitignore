@@ -1,6 +1,6 @@
 .DS_Store/
 *./.DS_Store
-*./private.py
+private.*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
