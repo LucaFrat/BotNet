@@ -1,6 +1,7 @@
 import os
 import time
 import gym_book.constants as const
+import gym_book.private as priv
 
 from selenium import webdriver
 
@@ -26,7 +27,7 @@ class Booking(webdriver.Chrome):
     def input_visualization(self) -> None:
         self.minimize_window()
         while True:
-            show_web_page = str(input('\nDo you wanna show the Web page? [y/n]: '))
+            show_web_page = "y" #str(input('\nDo you wanna show the Web page? [y/n]: '))
             if show_web_page == "y":
                 self.show_web_page = True
                 self.maximize_window()
@@ -35,7 +36,36 @@ class Booking(webdriver.Chrome):
                 self.show_web_page = False
                 break
 
-    def choose_login_method(self):
-        pass
-        
+    def go_to_login(self):
+        self.find_element_by_xpath(
+            '//*[@id="content"]/div/div[2]/div/login-page/div[2]/div/div[2]/button[1]'
+            ).click()
+        self.find_element_by_id(
+            'idp__titleremaining1'
+        ).click()
+
+    def login(self):
+        self.find_element_by_id(
+            'username'
+            ).send_keys(priv.USERNAME)
+        self.find_element_by_id(
+            'password'
+            ).send_keys(priv.PASSWORD)
+        self.find_element_by_id(
+            'submit_button'
+            ).click()
+
+    def change_focus_date(self):
+        days_element = self.find_element_by_css_selector('day-selector[class="mb-4"]')
+        available_days = days_element.find_elements_by_tag_name('a')
+        available_days[2].click()
+
+    def search_sports(self):
+        search_box = self.find_element_by_id('tag-searchfield')
+        for session in const.SESSIONS:
+            pass
+
+
+
+
     
