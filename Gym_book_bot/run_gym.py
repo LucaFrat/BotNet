@@ -16,5 +16,6 @@ def main():
         bot.search_sport(session)
         bot.click_book(time_slot, sure_to_book)
 
+
 if __name__ == '__main__':
     main()

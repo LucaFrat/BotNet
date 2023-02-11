@@ -72,8 +72,11 @@ def input_date() -> str:
 def input_time_slot() -> str:
     while True:
         time_slot = str(input("What time? > ")).strip()
-        if len(time_slot) == 1 and int(time_slot) in range(7,23):
+        if len(time_slot) == 1 and int(time_slot) in range(7,10):
             time_slot = f'0{time_slot}:00'
+            break
+        elif len(time_slot) == 2 and int(time_slot) in range(10,23):
+            time_slot = f'{time_slot}:00'
             break
         else:
             input_error()
