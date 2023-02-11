@@ -1,5 +1,5 @@
 """
 This file contains private info
 """
-USERNAME = 'old'
-PASSWORD = 'new'
+USERNAME = 'old2...'
+PASSWORD = 'new2...'

@@ -19,12 +19,13 @@ class Booking(webdriver.Chrome):
         super(Booking, self).__init__()
         self.implicitly_wait(15)
 
+    def init_actions(self) -> None:
+        self.actions = ActionChains(self)
+
     def __exit__(self, *args) -> None:
         if self.teardown:
             self.quit()
-
-    def init_actions(self) -> None:
-        self.actions = ActionChains(self)
+    
     
     def open_url(self, show_web_page: bool) -> None:
         self.get(const.URL)
@@ -33,10 +34,9 @@ class Booking(webdriver.Chrome):
             self.maximize_window()
 
     def go_to_login(self) -> None:
-        #TODO look for a better way to find the next element 
-        self.find_element_by_xpath(
-            '//*[@id="content"]/div/div[2]/div/login-page/div[2]/div/div[2]/button[1]'
-            ).click()
+        self.find_elements_by_class_name(
+            'btn-primary'
+            )[0].click()
         self.find_element_by_id(
             'idp__titleremaining1'
         ).click()
@@ -58,13 +58,14 @@ class Booking(webdriver.Chrome):
         available_days = days_element.find_elements_by_tag_name('a')
         available_days[2].click()
 
-    def search_sports(self, session: str) -> None:
-        search_box = self.find_element_by_id('tag-searchfield')
-        search_box.send_keys(session)
+    def search_sport(self, session: str) -> None:
+        self.find_element_by_id(
+            'tag-searchfield'
+            ).send_keys(session)
         self.actions.send_keys(Keys.ENTER).perform()
         
-    def click_book(self, time_slot: str, sure: bool=False) -> None:
-        self.sure = sure
+    def click_book(self, time_slot: str, sure_to_book: bool=False) -> None:
+        self.sure_to_book = sure_to_book
         slots = self.find_elements_by_class_name('d-inline-block')
         if time_slot == None:
             self.book_slot(slots[0])
@@ -74,30 +75,32 @@ class Booking(webdriver.Chrome):
                     'strong'
                     ).get_attribute('innerHTML')
                 if slot_time.strip() == time_slot:
-                    self.book_slot(slot)
+                    try:
+                        self.book_slot(slot)
+                    except:
+                        help.print_fail("Failed to book!")
                     break
 
     def book_slot(self, slot) -> None:
         spots_elements = slot.find_elements_by_tag_name('small')   
-        spots_element_str = spots_elements[-1].get_attribute('innerHTML')
-        spots_left = spots_element_str.strip().split()[-2]
+        spot_inner_str = spots_elements[-1].get_attribute('innerHTML')
+        spots_left = spot_inner_str.strip().split()[-2]
         if int(spots_left) > 0:
-            self.sure_to_book()
+            self.book_or_availability(slot)
         else:
-            print("")
-            print("+--------------------------------------------+")
-            print(f'{help.red("ERROR")}: this slot has no spots available! \n')
+            help.print_fail("this slot has no spots available!")
 
-    def sure_to_book(self) -> None:
-        if self.sure:
-            self.find_element_by_css_selector(
-                'button[class="btn-primary"]'
+    def book_or_availability(self, slot) -> None:
+        if self.sure_to_book:
+            slot.find_element_by_class_name(
+                'btn-primary'
                 ).click()
-            print("")
-            print(help.green("+----------------------------------------------------+"))
-            print(help.green("Booked! You should receive an email of confirmation."))
+            try:    
+                buttons = self.find_elements_by_tag_name('button')
+                buttons[-1].click()
+                help.print_success("Booked! You should receive an email of confirmation.")
+            except:
+                help.print_fail("Failed to book!")
         else:
-            print("")
-            print(help.green("+------------------------------------+"))
-            print(help.green("It works, you could book this slot!\n"))
+            help.print_success("You could book this slot!")
     

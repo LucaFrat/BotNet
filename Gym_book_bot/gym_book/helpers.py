@@ -1,15 +1,25 @@
 import gym_book.constants as const
 
-def input_info_booking():
+
+def define_variables(debug_mode: bool) -> list[bool,str,str,bool]:
+    if debug_mode:
+        show_web_page = True
+        session = const.TEST_SESSION
+        time_slot = const.TEST_TIME_SLOT
+        sure_to_book = False
+        return [show_web_page, session, time_slot, sure_to_book]
+    else:
+        return input_info_booking()
+
+def input_info_booking() -> list[bool,str,str,bool]:
     show = input_visualization()
-    sure = are_you_sure()
+    sure_to_book = are_you_sure()
     session = input_session()
-    date = input_date()
     if session == 'fitn':
         time_slot = input_time_slot()
     else:
         time_slot = None
-    return show, session, date, time_slot, sure
+    return [show, session, time_slot, sure_to_book]
 
 
 def input_visualization() -> None:
@@ -25,11 +35,13 @@ def input_visualization() -> None:
 
 def are_you_sure() -> bool:
     while True:
-        sure = str(input('Do you wanna Book (B) or just check for the Availability (A) [B/A] > '))
-        if sure == ("B" or "b"):
+        sure = str(input(
+            'Do you wanna Book or just check for the Availability? [b/a] > '
+            )).strip()
+        if sure in ["B","b","book"]:
             sure = True
             break
-        elif sure == ("A" or "a"):
+        elif sure in ["A","a","availability"]:
             sure = False
             break
     return sure
@@ -38,7 +50,6 @@ def input_session() -> str:
     while True:
         session = str(input("""
 Insert session to be booked.
-Choose among:
 - Fitness    [fitn]
 - Hatha Yoga [hat]
 - Power Yoga [power y]
@@ -60,11 +71,9 @@ def input_date() -> str:
 
 def input_time_slot() -> str:
     while True:
-        time_slot = str(input("What time? (insert [hh:mm]) > ")).strip()
-        time_slot.replace(time_slot[2], ":")
-        if all([len(time_slot) == 5, 
-                int(time_slot[:2]) in range(24),
-                int(time_slot[-2:]) in range(60)]):
+        time_slot = str(input("What time? > ")).strip()
+        if len(time_slot) == 1 and int(time_slot) in range(7,23):
+            time_slot = f'0{time_slot}:00'
             break
         else:
             input_error()
@@ -78,3 +87,11 @@ def red(text: str) -> str:
 
 def input_error() -> None:
     print(f'{red("Input failed")}, try again.')
+
+def print_success(text: str) -> None:
+    print(green("\n+------------------------------------+"))
+    print(green(f'{text}\n'))
+
+def print_fail(text: str) -> None:
+    print("\n+--------------------------------------------+")
+    print(f'{red("ERROR")}: {text} \n')
