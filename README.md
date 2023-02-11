@@ -38,7 +38,7 @@ Before being able to properly run the code you'll have to customize a couple of 
 
 be careful to set the variable `debug_mode` to `False` if you wanna insert value manually after you run the program.
 Once the program has being ran, you'll be asked to insert info from the terminal:
-![Alt text](gym_terminal.png)
+![Alt text](images/gym_terminal.png)
 
 
 
