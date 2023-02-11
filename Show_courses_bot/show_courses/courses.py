@@ -1,13 +1,12 @@
 import os
 import time
 import show_courses.constants as const
-from show_courses.course_filtration import CourseFiltration
+import show_courses.course_filtration as filtr
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
 
 
 class Courses(webdriver.Chrome):
@@ -89,7 +88,7 @@ class Courses(webdriver.Chrome):
             ).click()
 
     def apply_filtration(self) -> None:
-        filter = CourseFiltration(driver=self, choice=self.course_choice)
+        filter = filtr.CourseFiltration(driver=self, choice=self.course_choice)
         filter.apply_filter()
         if self.show_web_page:
             self.maximize_window()
