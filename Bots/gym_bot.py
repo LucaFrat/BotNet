@@ -4,6 +4,7 @@ the gym (X TU Delft) or check its availability.
 """
 
 import os
+import time
 import Bots.constants as const
 import Bots.gym_helpers as help
 
@@ -24,6 +25,7 @@ class Gym(webdriver.Chrome):
 
     def run(self, debug_mode: bool) -> None:
         """ Main function needed to run the bot """
+        self.minimize_window()
         show_web_page, session, time_slot, sure_to_book = help.define_variables(debug_mode)
         self.open_url(show_web_page)
         self.init_actions()
@@ -113,6 +115,7 @@ class Gym(webdriver.Chrome):
             try:    
                 buttons = self.find_elements_by_tag_name('button')
                 buttons[-1].click()
+                time.sleep(5)
                 help.print_success("Booked! You should receive an email of confirmation.")
             except:
                 help.print_fail("Failed to book!")

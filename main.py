@@ -21,7 +21,7 @@ def which_bot_to_run() -> Callable:
 
 
 def main(Bot: Callable) -> None:
-    debug_mode = True
+    debug_mode = False
     with Bot() as bot:
         bot.run(debug_mode)
 
