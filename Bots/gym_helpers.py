@@ -1,10 +1,10 @@
-import gym_book.constants as const
+import Bots.constants as const
 
 
 def define_variables(debug_mode: bool) -> list[bool,str,str,bool]:
     if debug_mode:
         show_web_page = True
-        session = const.TEST_SESSION
+        session = const.TEST_GYM_SESSION
         time_slot = const.TEST_TIME_SLOT
         sure_to_book = False
         return [show_web_page, session, time_slot, sure_to_book]
@@ -54,7 +54,7 @@ Insert session to be booked.
 - Hatha Yoga [hat]
 - Power Yoga [power y]
 > """)).strip()
-        if session in const.SESSIONS:
+        if session in const.GYM_SESSIONS:
             break
         else:
             input_error()

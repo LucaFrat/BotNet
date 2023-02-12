@@ -2,7 +2,7 @@
 # given some keywords
 
 from selenium.webdriver.remote.webdriver import WebDriver
-import show_courses.constants as const
+import Bots.constants as const
 from dataclasses import dataclass
 
 

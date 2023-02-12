@@ -1,7 +1,13 @@
+"""
+This Bot is useful to retreive and print in the terminal 
+informations about the available Bachelor and Master 
+courses, and about the PHD procedure, at the TU Delft.
+"""
+
 import os
 import time
-import show_courses.constants as const
-import show_courses.course_filtration as filtr
+import Bots.constants as const
+import Bots.courses_filtration as filtr
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -11,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class Courses(webdriver.Chrome):
     def __init__(self, driver_path=const.CHROME_PATH, 
-                 teardown=False
+                 teardown=True
                  ) -> None:
         self.driver_path = driver_path
         self.teardown = teardown
@@ -19,12 +25,23 @@ class Courses(webdriver.Chrome):
         super(Courses, self).__init__()
         self.implicitly_wait(15)
 
+    def run(self, debug_mode: bool) -> None:
+        """ Main function needed to run the bot """
+        self.open_url()
+        self.select_english()
+        self.check_cookie()
+        self.go_to_page_to_make_choice()
+        self.input_course_choice()
+        self.make_choice()
+        self.apply_filtration()
+
     def __exit__(self, *args) -> None:
+        """ Closes the web page """
         if self.teardown:
             self.quit()
 
     def open_url(self) -> None:
-        self.get(const.URL)
+        self.get(const.URL_COURSES)
         self.input_visualization()
         
     def input_visualization(self) -> None:
