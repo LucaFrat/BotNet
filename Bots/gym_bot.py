@@ -21,12 +21,12 @@ class Gym(webdriver.Chrome):
         self.teardown = teardown
         os.environ['PATH'] += const.CHROME_PATH
         super(Gym, self).__init__()
-        self.implicitly_wait(15)
+        self.implicitly_wait(20)
 
-    def run(self, debug_mode: bool) -> None:
+    def run(self, debug_mode: bool =False, my_booking: bool =False) -> None:
         """ Main function needed to run the bot """
         self.minimize_window()
-        show_web_page, session, time_slot, sure_to_book = help.define_variables(debug_mode)
+        show_web_page, session, time_slot, sure_to_book = help.define_variables(debug_mode, my_booking)
         self.open_url(show_web_page)
         self.init_actions()
         self.go_to_login()

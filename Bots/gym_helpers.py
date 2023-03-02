@@ -1,12 +1,18 @@
 import Bots.constants as const
 
 
-def define_variables(debug_mode: bool) -> list[bool,str,str,bool]:
+def define_variables(debug_mode: bool =False, my_booking: bool =False) -> list[bool,str,str,bool]:
     if debug_mode:
         show_web_page = True
         session = const.TEST_GYM_SESSION
         time_slot = const.TEST_TIME_SLOT
         sure_to_book = False
+        return [show_web_page, session, time_slot, sure_to_book]
+    elif my_booking:
+        show_web_page = True
+        session = const.MY_GYM_SESSION
+        time_slot = const.MY_TIME_SLOT
+        sure_to_book = True
         return [show_web_page, session, time_slot, sure_to_book]
     else:
         return input_info_booking()
